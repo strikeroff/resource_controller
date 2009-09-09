@@ -6,12 +6,27 @@ resource_controller makes RESTful controllers easier, more maintainable, and sup
 
 Install it as a plugin:
 
-  script/plugin install git://github.com/giraffesoft/resource_controller.git
+  script/plugin install git://github.com/strikeroff/resource_controller.git
+
+Or install it as a gem in your enviroment.rb:
+
+   config.gem "strikeroff-resource_controller",:lib => 'resource_controller', :source => 'http://gems.github.com'
+
+   it gives the source
+   and include it as plugin
+
+   config.plugins = [ :resource_controller]
+
+  run
+   
+   rake gems:install
   
 Or grab the source
   
-  git clone git://github.com/giraffesoft/resource_controller.git
+  git clone git://github.com/strikeroff/resource_controller.git
 
+
+  
 = Usage
 
 Creating a basic RESTful controller is as easy as...

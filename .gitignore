@@ -7,3 +7,6 @@ nbproject/*
 rdoc
 test/db/test.sqlite3
 .specification
+*.bat
+.idea
+*.gem
