@@ -1,12 +1,12 @@
 module ResourceController
   module Actions
-    
+
     def index
       load_collection
       before :index
       response_for :index
     end
-    
+
     def show
       load_object
       before :show
@@ -70,6 +70,30 @@ module ResourceController
         response_for :destroy_fails
       end
     end
-    
+
+    def update_attribute
+      load_object
+      object_params = {params[:attribute] => params[:value]}
+      object.update_attributes object_params
+      render :text=>"OK"
+    end
+
+    def update_attributes
+      load_object
+      result = "error"
+      if !params[:value].blank? && params[:value].json?
+        result = "OK" if object.update_attributes(ActiveSupport::JSON.decode(params[:value]))
+      end
+      render :text=>result
+    end
+
+    def show_attribute
+      @object = object
+      @object = @object.send params[:attribute]
+      response_for :show
+    rescue ActiveRecord::RecordNotFound
+      response_for :show_fails
+    end
+
   end
 end
