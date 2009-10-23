@@ -10,3 +10,4 @@ test/db/test.sqlite3
 *.bat
 .idea
 *.gem
+.idea

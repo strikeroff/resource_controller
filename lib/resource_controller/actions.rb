@@ -16,31 +16,35 @@ module ResourceController
     end
 
     def create
-      build_object
-      load_object
-      before :create
-      if object.save
-        after :create
-        set_flash :create
-        response_for :create
-      else
-        after :create_fails
-        set_flash :create_fails
-        response_for :create_fails
+      end_of_association_chain.transaction do
+        build_object
+        load_object
+        before :create
+        if object.save
+          after :create
+          set_flash :create
+          response_for :create
+        else
+          after :create_fails
+          set_flash :create_fails
+          response_for :create_fails
+        end
       end
     end
 
     def update
-      load_object
-      before :update
-      if object.update_attributes object_params
-        after :update
-        set_flash :update
-        response_for :update
-      else
-        after :update_fails
-        set_flash :update_fails
-        response_for :update_fails
+      end_of_association_chain.transaction do
+        load_object
+        before :update
+        if object.update_attributes object_params
+          after :update
+          set_flash :update
+          response_for :update
+        else
+          after :update_fails
+          set_flash :update_fails
+          response_for :update_fails
+        end
       end
     end
 
@@ -58,33 +62,39 @@ module ResourceController
     end
 
     def destroy
-      load_object
-      before :destroy
-      if object.destroy
-        after :destroy
-        set_flash :destroy
-        response_for :destroy
-      else
-        after :destroy_fails
-        set_flash :destroy_fails
-        response_for :destroy_fails
+      end_of_association_chain.transaction do
+        load_object
+        before :destroy
+        if object.destroy
+          after :destroy
+          set_flash :destroy
+          response_for :destroy
+        else
+          after :destroy_fails
+          set_flash :destroy_fails
+          response_for :destroy_fails
+        end
       end
     end
 
     def update_attribute
-      load_object
-      object_params = {params[:attribute] => params[:value]}
-      object.update_attributes object_params
-      render :text=>"OK"
+      end_of_association_chain.transaction do
+        load_object
+        object_params = {params[:attribute] => params[:value]}
+        object.update_attributes object_params
+        render :text=>"OK"
+      end
     end
 
     def update_attributes
-      load_object
-      result = "error"
-      if !params[:value].blank? && params[:value].json?
-        result = "OK" if object.update_attributes(ActiveSupport::JSON.decode(params[:value]))
+      end_of_association_chain.transaction do
+        load_object
+        result = "error"
+        if !params[:value].blank? && params[:value].json?
+          result = "OK" if object.update_attributes(ActiveSupport::JSON.decode(params[:value]))
+        end
+        render :text=>result
       end
-      render :text=>result
     end
 
     def show_attribute
