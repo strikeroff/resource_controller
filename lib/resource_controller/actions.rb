@@ -80,9 +80,17 @@ module ResourceController
     def update_attribute
       end_of_association_chain.transaction do
         load_object
-        object_params = {params[:attribute] => params[:value]}
-        object.update_attributes object_params
-        render :text=>"OK"
+        to_show = nil
+        value = params[:value]
+
+        #value = true        if value.match(/true/i)
+        #value = false if value.match(/false/i)
+        object.update_attributes({params[:attribute] => value})
+        if match = params[:attribute].match(/[a-z]+(?=(_id))/i)
+          assoc_object = match[0].classify.constantize.find(params[:value])
+          to_show = assoc_object.name
+        end
+        render :text=> to_show|| params[:value]
       end
     end
 
@@ -96,6 +104,7 @@ module ResourceController
         render :text=>result
       end
     end
+
 
     def show_attribute
       @object = object

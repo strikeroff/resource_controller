@@ -336,6 +336,18 @@ Or with namespaced, nested controllers...
   
 You get the idea.  Everything is automagical!  All parameters are inferred.
 
+Different from original
+
+    1) Changing actions wrap with transaction
+	
+	2) Every resource has 3 additional routes:
+	    show_attribute - show one attribute
+		update_attribute - update one attribute
+		update_attributes - deprecated for now
+		
+		see rake routes for urls and params
+
+
 == Credits
 
 resource_controller was created, and is maintained by {James Golick}[http://jamesgolick.com].

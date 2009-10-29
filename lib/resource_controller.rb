@@ -68,6 +68,10 @@ require File.join(File.dirname(__FILE__), "resource_controller", "failable_actio
 require File.join(File.dirname(__FILE__), "resource_controller", "singleton.rb")
 require File.join(File.dirname(__FILE__), "resource_controller", "helpers", "singleton_customizations.rb")
 
+require File.join(File.dirname(__FILE__), "resource_controller", "routing_ext.rb")
+
+ActionController::Resources.send :include, ResourceController::RoutingExt
+
 require File.dirname(__FILE__)+'/../rails/init.rb' unless ActionController::Base.include?(Urligence)
 
 
